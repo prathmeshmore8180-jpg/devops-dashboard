@@ -3,71 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevOps Service Dashboard - Exp 11</title>
+  <title>Agile DevOps Board - Sprint 1</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0b132b; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    .card { background: #1c2541; width: 100%; max-width: 580px; border-radius: 12px; padding: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid #3a506b; }
-    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #3a506b; padding-bottom: 15px; margin-bottom: 20px; }
-    .title { font-size: 1.3rem; font-weight: 700; color: #6fffe9; display: flex; align-items: center; gap: 8px; }
-    .badge { background: #0b132b; border: 1px solid #6fffe9; color: #6fffe9; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-    .metrics-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-    .metric-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #0b132b; border-radius: 8px; font-size: 0.9rem; }
-    .metric-label { color: #a5b4fc; }
-    .metric-value { font-weight: 600; color: #f8fafc; }
-    .status-up { color: #4ade80; display: inline-flex; align-items: center; gap: 6px; }
-    .status-dot { width: 8px; height: 8px; background-color: #4ade80; border-radius: 50%; box-shadow: 0 0 8px #4ade80; }
-    .actions { display: flex; gap: 10px; }
-    .btn { flex: 1; text-align: center; text-decoration: none; padding: 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
-    .btn-primary { background: #5bc0be; color: #0b132b; }
-    .btn-primary:hover { background: #6fffe9; }
-    .btn-secondary { background: #3a506b; color: #f8fafc; }
-    .btn-secondary:hover { background: #4a6589; }
-    .footer { margin-top: 18px; text-align: center; font-size: 0.75rem; color: #64748b; }
+    body { background-color: #0b132b; color: #f8fafc; padding: 25px; }
+    
+    .top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #3a506b; padding-bottom: 15px; margin-bottom: 20px; }
+    .title { font-size: 1.4rem; font-weight: 700; color: #6fffe9; display: flex; align-items: center; gap: 10px; }
+    .badge { background: #1c2541; border: 1px solid #6fffe9; color: #6fffe9; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+    /* DevOps Status Bar */
+    .system-banner { display: flex; gap: 15px; background: #1c2541; padding: 12px 18px; border-radius: 8px; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 25px; border: 1px solid #3a506b; flex-wrap: wrap; }
+    .status-up { color: #4ade80; font-weight: 600; }
+
+    /* Ticket Creation Form */
+    .form-box { background: #1c2541; padding: 15px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #3a506b; }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .form-row input, .form-row select { flex: 1; min-width: 150px; padding: 9px 12px; background: #0b132b; border: 1px solid #3a506b; border-radius: 6px; color: #fff; font-size: 0.9rem; }
+    .form-row button { background: #5bc0be; color: #0b132b; border: none; padding: 9px 18px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+    .form-row button:hover { background: #6fffe9; }
+
+    /* Agile 3-Column Board */
+    .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .column { background: #1c2541; border-radius: 8px; padding: 16px; border: 1px solid #3a506b; min-height: 400px; display: flex; flex-direction: column; }
+    .col-header { font-size: 1.05rem; font-weight: 700; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid #3a506b; display: flex; justify-content: space-between; }
+    .counter { background: #0b132b; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; color: #6fffe9; }
+
+    .ticket-list { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .card { background: #0b132b; border: 1px solid #3a506b; border-radius: 6px; padding: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    .card-top { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 6px; color: #94a3b8; }
+    .card-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
+
+    /* Priority Badges */
+    .p-High { color: #f87171; background: #450a0a; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    .p-Medium { color: #fbbf24; background: #451a03; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    .p-Low { color: #34d399; background: #064e3b; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+
+    /* Movement Action Buttons */
+    .btn-group { display: flex; gap: 6px; }
+    .btn-group button { flex: 1; padding: 4px 6px; font-size: 0.75rem; border: none; border-radius: 4px; cursor: pointer; background: #3a506b; color: #fff; }
+    .btn-group button:hover { background: #5bc0be; color: #0b132b; }
+    .btn-group button.btn-del { background: #7f1d1d; }
+    .btn-group button.btn-del:hover { background: #dc2626; color: #fff; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="header">
-      <div class="title">🚀 DevOps Service Monitor</div>
-      <span class="badge">Exp 11 Mini-Project</span>
-    </div>
+  <div class="top-bar">
+    <div class="title">📋 Agile Sprint Board & DevOps Monitor</div>
+    <span class="badge">{{ info.sprint }}</span>
+  </div>
 
-    <div class="metrics-group">
-      <div class="metric-row">
-        <span class="metric-label">System Status</span>
-        <span class="metric-value status-up"><span class="status-dot"></span> {{ info.status }}</span>
-      </div>
-      <div class="metric-row">
-        <span class="metric-label">Container / Host</span>
-        <span class="metric-value">{{ info.container_id }}</span>
-      </div>
-      <div class="metric-row">
-        <span class="metric-label">OS Platform</span>
-        <span class="metric-value">{{ info.os_platform }}</span>
-      </div>
-      <div class="metric-row">
-        <span class="metric-label">Python Runtime</span>
-        <span class="metric-value">v{{ info.python_version }}</span>
-      </div>
-      <div class="metric-row">
-        <span class="metric-label">Environment Mode</span>
-        <span class="metric-value">{{ info.environment }}</span>
-      </div>
-      <div class="metric-row">
-        <span class="metric-label">Last Refresh</span>
-        <span class="metric-value">{{ info.timestamp }}</span>
-      </div>
-    </div>
+  <div class="system-banner">
+    <div>🟢 Status: <span class="status-up">{{ info.status }}</span></div>
+    <div>📦 Container: <strong>{{ info.container_id }}</strong></div>
+    <div>💻 OS: <strong>{{ info.os_platform }}</strong></div>
+    <div>⚡ Python: <strong>v{{ info.python_version }}</strong></div>
+  </div>
 
-    <div class="actions">
-      <a href="/health" target="_blank" class="btn btn-primary">Check Health JSON (/health)</a>
-      <a href="/" class="btn btn-secondary">Refresh Dashboard</a>
-    </div>
-
-    <div class="footer">
-      Automated via Git • Docker • Docker Compose • GitHub Actions CI/CD
+  <div class="form-box">
+    <div class="form-row">
+      <input type="text" id="ticketTitle" placeholder="User Story / Task title (e.g., Integrate SonarQube)" required>
+      <select id="ticketPriority">
+        <option value="Low">Low Priority</option>
+        <option value="Medium" selected>Medium Priority</option>
+        <option value="High">High Priority</option>
+      </select>
+      <button onclick="createTicket()">+ Add to Sprint Backlog</button>
     </div>
   </div>
+
+  <div class="board">
+    <!-- TO DO -->
+    <div class="column">
+      <div class="col-header">📌 To Do <span class="counter" id="count-todo">0</span></div>
+      <div class="ticket-list" id="list-todo"></div>
+    </div>
+
+    <!-- IN PROGRESS -->
+    <div class="column">
+      <div class="col-header">⚙️ In Progress <span class="counter" id="count-in_progress">0</span></div>
+      <div class="ticket-list" id="list-in_progress"></div>
+    </div>
+
+    <!-- DONE -->
+    <div class="column">
+      <div class="col-header">✅ Done <span class="counter" id="count-done">0</span></div>
+      <div class="ticket-list" id="list-done"></div>
+    </div>
+  </div>
+
+  <script>
+    async function fetchBoard() {
+      const res = await fetch('/api/tickets');
+      const tickets = await res.json();
+      renderTickets(tickets);
+    }
+
+    function renderTickets(tickets) {
+      const lists = {
+        todo: document.getElementById('list-todo'),
+        in_progress: document.getElementById('list-in_progress'),
+        done: document.getElementById('list-done')
+      };
+      const counts = { todo: 0, in_progress: 0, done: 0 };
+      Object.values(lists).forEach(el => el.innerHTML = '');
+
+      tickets.forEach(t => {
+        counts[t.status]++;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-top">
+            <span>${t.id}</span>
+            <span class="p-${t.priority}">${t.priority}</span>
+          </div>
+          <div class="card-title">${t.title}</div>
+          <div class="btn-group">
+            ${t.status !== 'todo' ? `<button onclick="moveTicket('${t.id}', 'todo')">← Todo</button>` : ''}
+            ${t.status !== 'in_progress' ? `<button onclick="moveTicket('${t.id}', 'in_progress')">⚙️ Progress</button>` : ''}
+            ${t.status !== 'done' ? `<button onclick="moveTicket('${t.id}', 'done')">Done →</button>` : ''}
+            <button class="btn-del" onclick="deleteTicket('${t.id}')">✕</button>
+          </div>
+        `;
+        lists[t.status].appendChild(card);
+      });
+
+      document.getElementById('count-todo').textContent = counts.todo;
+      document.getElementById('count-in_progress').textContent = counts.in_progress;
+      document.getElementById('count-done').textContent = counts.done;
+    }
+
+    async function createTicket() {
+      const titleInput = document.getElementById('ticketTitle');
+      const priority = document.getElementById('ticketPriority').value;
+      if (!titleInput.value.trim()) return;
+
+      await fetch('/api/tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: titleInput.value.trim(), priority: priority })
+      });
+      titleInput.value = '';
+      fetchBoard();
+    }
+
+    async function moveTicket(id, status) {
+      await fetch(`/api/tickets/${id}/move`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: status })
+      });
+      fetchBoard();
+    }
+
+    async function deleteTicket(id) {
+      await fetch(`/api/tickets/${id}`, { method: 'DELETE' });
+      fetchBoard();
+    }
+
+    // Initial load
+    fetchBoard();
+  </script>
 </body>
 </html>
