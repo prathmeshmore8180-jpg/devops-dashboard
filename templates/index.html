@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps Service Dashboard - Exp 11</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0b132b; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .card { background: #1c2541; width: 100%; max-width: 580px; border-radius: 12px; padding: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid #3a506b; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #3a506b; padding-bottom: 15px; margin-bottom: 20px; }
+    .title { font-size: 1.3rem; font-weight: 700; color: #6fffe9; display: flex; align-items: center; gap: 8px; }
+    .badge { background: #0b132b; border: 1px solid #6fffe9; color: #6fffe9; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .metrics-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .metric-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #0b132b; border-radius: 8px; font-size: 0.9rem; }
+    .metric-label { color: #a5b4fc; }
+    .metric-value { font-weight: 600; color: #f8fafc; }
+    .status-up { color: #4ade80; display: inline-flex; align-items: center; gap: 6px; }
+    .status-dot { width: 8px; height: 8px; background-color: #4ade80; border-radius: 50%; box-shadow: 0 0 8px #4ade80; }
+    .actions { display: flex; gap: 10px; }
+    .btn { flex: 1; text-align: center; text-decoration: none; padding: 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+    .btn-primary { background: #5bc0be; color: #0b132b; }
+    .btn-primary:hover { background: #6fffe9; }
+    .btn-secondary { background: #3a506b; color: #f8fafc; }
+    .btn-secondary:hover { background: #4a6589; }
+    .footer { margin-top: 18px; text-align: center; font-size: 0.75rem; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="title">🚀 DevOps Service Monitor</div>
+      <span class="badge">Exp 11 Mini-Project</span>
+    </div>
+
+    <div class="metrics-group">
+      <div class="metric-row">
+        <span class="metric-label">System Status</span>
+        <span class="metric-value status-up"><span class="status-dot"></span> {{ info.status }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Container / Host</span>
+        <span class="metric-value">{{ info.container_id }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">OS Platform</span>
+        <span class="metric-value">{{ info.os_platform }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Python Runtime</span>
+        <span class="metric-value">v{{ info.python_version }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Environment Mode</span>
+        <span class="metric-value">{{ info.environment }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Last Refresh</span>
+        <span class="metric-value">{{ info.timestamp }}</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="/health" target="_blank" class="btn btn-primary">Check Health JSON (/health)</a>
+      <a href="/" class="btn btn-secondary">Refresh Dashboard</a>
+    </div>
+
+    <div class="footer">
+      Automated via Git • Docker • Docker Compose • GitHub Actions CI/CD
+    </div>
+  </div>
+</body>
+</html>

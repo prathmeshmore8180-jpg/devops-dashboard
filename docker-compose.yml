@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  devops-dashboard:
+    build: .
+    container_name: devops_dashboard_container
+    ports:
+      - "5000:5000"
+    environment:
+      - ENV_MODE=Production-Docker
+    restart: always
